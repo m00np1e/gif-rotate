@@ -56,6 +56,9 @@ def error_check(infile, outfile, directory):
     if not infile:
         print("Input file not provided: use -i")
         exit(1)
+    if not os.path.isfile(infile):
+        print("Input file not found")
+        exit(1)
     if not outfile:
         print("Output file not provided: use -o")
         exit(1)
@@ -66,6 +69,7 @@ def error_check(infile, outfile, directory):
 
 def make_gif(outfile, outdir):
     # create frames
+    global new_frame
     frames = []
     imgs = glob.glob(outdir + "\\*.jpg")
 
@@ -74,7 +78,11 @@ def make_gif(outfile, outdir):
     # frames to 90 for size considerations
     skip = 1
     for i in imgs:
-        new_frame = Image.open(i)
+        try:
+            new_frame = Image.open(i)
+        except IOError:
+            print("Error: Cannot open input file for reading or input file not found.")
+        exit(1)
         if (skip % 4) == 0:
             frames.append(new_frame)
         skip += 1
