@@ -119,7 +119,7 @@ def main():
     rot_range = 360 if not rotation else int(rotation)
 
     # ideal width and height
-    img_shape = None if (not ideal_w) and (not ideal_h) else (int(ideal_w), int(ideal_h))
+    img_shape = None if (not ideal_w) or (not ideal_h) else (int(ideal_w), int(ideal_h))
 
     # where the magic happens
     it = ImageTransformer(img_path, img_shape)

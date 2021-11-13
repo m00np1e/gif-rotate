@@ -6,7 +6,6 @@ def load_image(img_path, shape=None):
     img = cv2.imread(img_path)
     if shape is not None:
         img = cv2.resize(img, shape)
-
     return img
 
 
