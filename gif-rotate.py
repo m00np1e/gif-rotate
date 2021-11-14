@@ -78,11 +78,7 @@ def make_gif(outfile, outdir):
     # frames to 90 for size considerations
     skip = 1
     for i in imgs:
-        try:
-            new_frame = Image.open(i)
-        except IOError:
-            print("Error: Cannot open input file for reading or input file not found.")
-        exit(1)
+        new_frame = Image.open(i)
         if (skip % 4) == 0:
             frames.append(new_frame)
         skip += 1
@@ -119,7 +115,7 @@ def main():
     rot_range = 360 if not rotation else int(rotation)
 
     # ideal width and height
-    img_shape = None if (not ideal_w) or (not ideal_h) else (int(ideal_w), int(ideal_h))
+    img_shape = None if (not ideal_w) and (not ideal_h) else (int(ideal_w), int(ideal_h))
 
     # where the magic happens
     it = ImageTransformer(img_path, img_shape)
