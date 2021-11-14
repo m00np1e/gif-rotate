@@ -43,10 +43,11 @@ def check_args():
     parser.add_argument("-o", help="Output file - The animated gif.", required=True)
     parser.add_argument("-d", help="Output directory - Directory to hold the images used for making the gif.",
                         required=True)
-    parser.add_argument("-r", help="Degrees to rotate.", type=int)
-    parser.add_argument("-w", help="Ideal width", type=int)
-    parser.add_argument("-g", help="Ideal height", type=int)
-    parser.add_argument("-t", help="Type of rotation (y for y-axis, z for yz-axis). Invalid entry defaults to y.")
+    parser.add_argument("-r", help="Degrees to rotate. If omitted, will default to 360.", type=int)
+    parser.add_argument("-w", help="Ideal width. If omitted, will default to original image width.", type=int)
+    parser.add_argument("-g", help="Ideal height. If omitted, will default to original image height.", type=int)
+    parser.add_argument("-t", help="Type of rotation (y for y-axis, z for yz-axis). Omitted or invalid entry defaults "
+                                   "to y.")
     args1 = parser.parse_args()
     return (args1)
 
@@ -69,21 +70,26 @@ def error_check(infile, outfile, directory):
 
 def make_gif(outfile, outdir):
     # create frames
-    global new_frame
     frames = []
     imgs = glob.glob(outdir + "\\*.jpg")
 
     # adding this to only save every 4 frames
     # for a 360 degree rotation this reduces
-    # frames to 90 for size considerations
+    # frames to 90 for filesize considerations
     skip = 1
     for i in imgs:
         new_frame = Image.open(i)
         if (skip % 4) == 0:
             frames.append(new_frame)
         skip += 1
+
     # save the rotating gif
-    frames[0].save(outfile, format='GIF', append_images=frames[1:], save_all=True, duration=50, loop=0)
+    try:
+        frames[0].save(outfile, format='GIF', append_images=frames[1:], save_all=True, duration=50, loop=0)
+        print("GIF created:", outfile)
+    except IOError:
+        print("Error: Cannot open output file.")
+        exit(1)
 
     # use gifsicle to reduce and optimize the animated gif, suppressing warning messages
     # this should get it to under 128kb
