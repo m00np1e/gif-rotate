@@ -10,7 +10,7 @@
 # to 360 degrees
 
 # based on code from: https://github.com/eborboihuc/rotate_3d
-# added code for arguments, working with the temp directory, gif optimizing, etc.
+# added code for arguments, working with the temp directory, gif optimizing & resizing, etc.
 
 # todo:
 # more error checking
@@ -83,10 +83,7 @@ def make_gif(outfile, outdir):
             frames.append(new_frame)
         skip += 1
     # save the rotating gif
-    frames[0].save(outfile, format='GIF',
-                   append_images=frames[1:],
-                   save_all=True,
-                   duration=50, loop=0)
+    frames[0].save(outfile, format='GIF', append_images=frames[1:], save_all=True, duration=50, loop=0)
 
     # use gifsicle to reduce and optimize the animated gif, suppressing warning messages
     # this should get it to under 128kb
