@@ -94,7 +94,11 @@ def make_gif(outfile, outdir):
     # use gifsicle to reduce and optimize the animated gif, suppressing warning messages
     # this should get it to under 128kb
     # if not, the scale= value can be decreased until the desired filesize is reached
-    gifsicle(sources=[outfile], destination=outfile, optimize=True, options=['--scale=0.7', '-w'])
+    try:
+        gifsicle(sources=[outfile], destination=outfile, optimize=True, options=['--scale=0.7', '-w'])
+    except IOError:
+        print("Error. Cannot write output file.")
+        exit(1)
 
 
 # main
